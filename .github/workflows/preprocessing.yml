@@ -1,0 +1,38 @@
+name: preprocessing-automation
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  run-preprocessing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run preprocessing script
+        run: |
+          python preprocessing/automate_Rivaldo.py \
+            --raw_path spiderman_youtube_review_raw/spiderman_youtube_review_raw.csv \
+            --output_dir preprocessing/spiderman_youtube_review_preprocessing
+
+      - name: Upload preprocessed dataset as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: spiderman_youtube_review_preprocessed
+          path: preprocessing/spiderman_youtube_review_preprocessing/spiderman_youtube_review_preprocessed.csv

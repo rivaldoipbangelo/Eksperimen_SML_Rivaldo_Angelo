@@ -2,23 +2,29 @@ name: preprocessing-automation
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [main, master]
   workflow_dispatch:
 
 jobs:
   run-preprocessing:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    defaults:
+      run:
+        working-directory: "Eksperimen_SML_Rivaldo Angelo"
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.10"
+
+      - name: Debug (cek file)
+        run: |
+          pwd
+          ls -la
+          find . -maxdepth 2 -type f -name "requirements.txt"
 
       - name: Install dependencies
         run: |
@@ -35,4 +41,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: spiderman_youtube_review_preprocessed
-          path: preprocessing/spiderman_youtube_review_preprocessing/spiderman_youtube_review_preprocessed.csv
+          path: "Eksperimen_SML_Rivaldo Angelo/preprocessing/spiderman_youtube_review_preprocessing/spiderman_youtube_review_preprocessed.csv"
